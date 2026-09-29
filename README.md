@@ -64,7 +64,7 @@ App runs on `http://localhost:3000`, WebSocket on `http://localhost:3001`.
 │   ├── app/           # Next.js pages & API routes
 │   ├── components/    # Reusable UI components
 │   ├── db/            # Drizzle ORM schema & client
-│   └── lib/           # Utilities (socket, sound, auth)
+│   └── lib/           # Utilities (socket, sound)
 ├── server/
 │   ├── index.ts       # Socket.io WebSocket server
 │   └── Dockerfile     # Container for Render deployment

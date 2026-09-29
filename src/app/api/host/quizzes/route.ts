@@ -1,8 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { quizzes, questions, rooms } from "@/db/schema";
-import { auth } from "@/lib/auth/server";
-import { eq, desc, or } from "drizzle-orm";
+import { eq, desc } from "drizzle-orm";
 import crypto from "crypto";
 
 async function generateUniqueRoomCode() {
@@ -20,37 +19,11 @@ async function generateUniqueRoomCode() {
 
 export async function GET() {
   try {
-    let sessionUser: { id: string; email?: string } | null = null;
-    try {
-      const sessionRes = await auth.getSession();
-      if (sessionRes?.data?.user) {
-        sessionUser = sessionRes.data.user;
-      }
-    } catch {
-      // Guest
-    }
-
-    let userQuizzes = [];
-    if (sessionUser) {
-      userQuizzes = await db
-        .select()
-        .from(quizzes)
-        .where(
-          or(
-            eq(quizzes.hostUserId, sessionUser.id),
-            eq(quizzes.hostSessionId, sessionUser.id),
-            sessionUser.email ? eq(quizzes.hostUserEmail, sessionUser.email) : undefined
-          )
-        )
-        .orderBy(desc(quizzes.createdAt))
-        .limit(50);
-    } else {
-      userQuizzes = await db
-        .select()
-        .from(quizzes)
-        .orderBy(desc(quizzes.createdAt))
-        .limit(20);
-    }
+    const userQuizzes = await db
+      .select()
+      .from(quizzes)
+      .orderBy(desc(quizzes.createdAt))
+      .limit(50);
 
     // Attach question counts
     const quizzesWithCounts = await Promise.all(
@@ -71,8 +44,6 @@ export async function GET() {
     const draftQuizzes = quizzesWithCounts.filter(q => q.status === "draft");
 
     return NextResponse.json({
-      authenticated: !!sessionUser,
-      user: sessionUser,
       quizzes: publishedQuizzes,
       drafts: draftQuizzes,
       all: quizzesWithCounts,

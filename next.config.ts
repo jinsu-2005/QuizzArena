@@ -5,7 +5,6 @@ const nextConfig: NextConfig = {
     "*": [
       "./server/**",
       "./scripts/**",
-      "./**/*.mjs",
     ],
   },
 };

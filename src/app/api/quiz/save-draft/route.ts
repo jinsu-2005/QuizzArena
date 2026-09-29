@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { quizzes, questions } from "@/db/schema";
-import { auth } from "@/lib/auth/server";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 
@@ -12,17 +11,6 @@ export async function POST(req: Request) {
 
     if (!quiz || !quiz.title) {
       return NextResponse.json({ error: "Quiz title is required" }, { status: 400 });
-    }
-
-    // Get active host user session if any
-    let sessionUser: { id: string; email?: string } | null = null;
-    try {
-      const sessionRes = await auth.getSession();
-      if (sessionRes?.data?.user) {
-        sessionUser = sessionRes.data.user;
-      }
-    } catch {
-      // Guest
     }
 
     let targetQuizId = quizId ? parseInt(quizId, 10) : null;
@@ -47,9 +35,9 @@ export async function POST(req: Request) {
         .insert(quizzes)
         .values({
           title: quiz.title,
-          hostSessionId: sessionUser?.id || hostToken,
-          hostUserId: sessionUser?.id || null,
-          hostUserEmail: sessionUser?.email || null,
+          hostSessionId: hostToken,
+          hostUserId: null,
+          hostUserEmail: null,
           status: "draft",
         })
         .returning({ id: quizzes.id });

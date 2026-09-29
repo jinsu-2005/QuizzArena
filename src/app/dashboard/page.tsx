@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Navbar";
-import { authClient } from "@/lib/auth/client";
 import { 
   Sparkles, 
   PlusCircle, 
@@ -42,7 +41,6 @@ const AI_TOPIC_PRESETS = [
 
 export default function HostDashboardPage() {
   const router = useRouter();
-  const { data: session } = authClient.useSession();
   
   const [activeTab, setActiveTab] = useState<"saved" | "drafts" | "ai">("saved");
   const [quizzes, setQuizzes] = useState<QuizItem[]>([]);
@@ -74,7 +72,7 @@ export default function HostDashboardPage() {
 
   useEffect(() => {
     fetchQuizzesAndDrafts();
-  }, [session]);
+  }, []);
 
   const handleLaunchRoom = async (quizId: number) => {
     try {
@@ -157,16 +155,14 @@ export default function HostDashboardPage() {
           <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold">
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span>Neon Auth & Database Connected</span>
+                <Sparkles className="w-3.5 h-3.5" />
+                <span>Host Control Center</span>
               </div>
               <h1 className="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                {session?.user ? `Welcome, ${session.user.name}` : "Host Command Center"}
+                Tournament Command Hub
               </h1>
               <p className="text-slate-400 text-sm max-w-2xl">
-                {session?.user
-                  ? `Authenticated as ${session.user.email}. Manage your quizzes, drafts, and launch real-time buzzer tournaments.`
-                  : "Sign in with Neon Auth to link your quizzes across devices, or create and host instantly."}
+                Create quizzes, generate questions with Gemini AI, and launch live real-time buzzer battle arenas.
               </p>
             </div>
 
@@ -226,14 +222,14 @@ export default function HostDashboardPage() {
 
           <div className="p-5 rounded-2xl bg-slate-900/60 border border-slate-800/70">
             <div className="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">
-              <span>Auth Session</span>
+              <span>Database Engine</span>
               <Database className="w-4 h-4 text-amber-400" />
             </div>
             <div className="text-xl sm:text-2xl font-bold text-white truncate">
-              {session?.user ? "Verified" : "Guest Mode"}
+              Neon PostgreSQL
             </div>
-            <div className="text-xs text-slate-500 mt-1">
-              {session?.user ? session.user.email : "Neon Auth ready"}
+            <div className="text-xs text-emerald-400 font-medium mt-1 flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> Connected
             </div>
           </div>
         </div>

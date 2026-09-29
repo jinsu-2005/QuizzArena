@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 import { db } from "@/db";
 import { quizzes, questions, rooms } from "@/db/schema";
-import { auth } from "@/lib/auth/server";
 import { eq } from "drizzle-orm";
 import crypto from "crypto";
 import { z } from "zod";
@@ -47,17 +46,6 @@ export async function POST(req: Request) {
     
     const quizData = parsed.data;
     const hostToken = crypto.randomUUID();
-    
-    // Check if host is logged in with Neon Auth
-    let sessionUser: { id: string; email?: string } | null = null;
-    try {
-      const sessionRes = await auth.getSession();
-      if (sessionRes?.data?.user) {
-        sessionUser = sessionRes.data.user;
-      }
-    } catch {
-      // Guest host
-    }
 
     const existingQuizId = body.quizId ? parseInt(body.quizId, 10) : null;
     let targetQuizId: number;
@@ -76,12 +64,12 @@ export async function POST(req: Request) {
       await db.delete(questions).where(eq(questions.quizId, existingQuizId));
       targetQuizId = existingQuizId;
     } else {
-      // Create quiz linked to Neon DB and Neon Auth
+      // Create quiz in Neon DB
       const [insertedQuiz] = await db.insert(quizzes).values({
         title: quizData.title,
-        hostSessionId: sessionUser?.id || hostToken,
-        hostUserId: sessionUser?.id || null,
-        hostUserEmail: sessionUser?.email || null,
+        hostSessionId: hostToken,
+        hostUserId: null,
+        hostUserEmail: null,
         status: "published",
       }).returning({ id: quizzes.id });
       targetQuizId = insertedQuiz.id;

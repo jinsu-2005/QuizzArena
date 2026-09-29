@@ -25,11 +25,9 @@ import {
 } from "lucide-react";
 import { sounds } from "@/lib/sound";
 import { toast } from "sonner";
-import { authClient } from "@/lib/auth/client";
 
 export default function Home() {
   const router = useRouter();
-  const { data: session } = authClient.useSession();
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [pinInput, setPinInput] = useState("");
 
@@ -93,24 +91,6 @@ export default function Home() {
             >
               {soundEnabled ? <Volume2 className="w-4 h-4 text-cyan-400" /> : <VolumeX className="w-4 h-4 text-slate-500" />}
             </button>
-
-            {/* Neon Auth Profile / Sign In */}
-            {session?.user ? (
-              <Link
-                href="/dashboard"
-                className="hidden sm:inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-900 border border-amber-500/40 text-xs font-semibold text-white hover:bg-slate-800 transition-colors shrink-0"
-              >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="truncate max-w-[100px]">{session.user.name || "Host"}</span>
-              </Link>
-            ) : (
-              <Link
-                href="/auth/sign-in"
-                className="hidden sm:inline-flex items-center px-3.5 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-800 transition-colors shrink-0"
-              >
-                Sign In
-              </Link>
-            )}
 
             <Link
               href="/create"

@@ -2,27 +2,10 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { authClient } from "@/lib/auth/client";
-import { Zap, Sparkles, LogOut, LayoutDashboard, PlusCircle, Menu, X, ShieldCheck } from "lucide-react";
-import { toast } from "sonner";
+import { Zap, Sparkles, LayoutDashboard, PlusCircle, Menu, X } from "lucide-react";
 
 export default function Navbar() {
-  const router = useRouter();
-  const { data: session, isPending } = authClient.useSession();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  const handleSignOut = async () => {
-    try {
-      await authClient.signOut();
-      toast.success("Signed out successfully");
-      router.push("/");
-      router.refresh();
-    } catch (err: any) {
-      console.error("Sign out error:", err);
-      toast.error("Failed to sign out");
-    }
-  };
 
   return (
     <nav className="w-full border-b border-slate-800/80 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-50">
@@ -68,50 +51,15 @@ export default function Navbar() {
             </Link>
           </div>
 
-          {/* Auth State */}
+          {/* Action CTA */}
           <div className="hidden md:flex items-center gap-3">
-            {isPending ? (
-              <div className="w-24 h-8 bg-slate-800/60 animate-pulse rounded-lg" />
-            ) : session?.user ? (
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs">
-                  <div className="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center text-[11px] border border-amber-500/40">
-                    {session.user.name ? session.user.name.charAt(0).toUpperCase() : "H"}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="font-semibold text-white truncate max-w-[120px]">
-                      {session.user.name || "Host"}
-                    </span>
-                    <span className="text-[10px] text-amber-400/80 flex items-center gap-0.5">
-                      <ShieldCheck className="w-3 h-3 inline" /> Neon Auth
-                    </span>
-                  </div>
-                </div>
-
-                <button
-                  onClick={handleSignOut}
-                  className="p-2 text-slate-400 hover:text-red-400 hover:bg-slate-900 rounded-lg transition-colors cursor-pointer"
-                  title="Sign Out"
-                >
-                  <LogOut className="w-4 h-4" />
-                </button>
-              </div>
-            ) : (
-              <div className="flex items-center gap-2.5">
-                <Link
-                  href="/auth/sign-in"
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-semibold text-slate-300 hover:text-white hover:bg-slate-900 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/sign-up"
-                  className="px-3.5 py-1.5 rounded-lg text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 shadow-sm shadow-amber-500/20 transition-all cursor-pointer"
-                >
-                  Create Account
-                </Link>
-              </div>
-            )}
+            <Link
+              href="/create"
+              className="px-4 py-2 rounded-xl text-xs font-bold text-slate-950 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 shadow-sm shadow-amber-500/20 transition-all flex items-center gap-1.5 cursor-pointer"
+            >
+              <Zap className="w-3.5 h-3.5 fill-slate-950" />
+              <span>Host a Quiz</span>
+            </Link>
           </div>
 
           {/* Mobile menu trigger */}
@@ -152,39 +100,14 @@ export default function Navbar() {
           </Link>
 
           <div className="pt-3 border-t border-slate-800">
-            {session?.user ? (
-              <div className="space-y-2">
-                <div className="text-xs text-slate-400">
-                  Logged in as <span className="text-white font-semibold">{session.user.name}</span>
-                </div>
-                <button
-                  onClick={() => {
-                    setMobileMenuOpen(false);
-                    handleSignOut();
-                  }}
-                  className="w-full text-left text-sm text-red-400 py-1"
-                >
-                  Sign Out
-                </button>
-              </div>
-            ) : (
-              <div className="flex gap-2">
-                <Link
-                  href="/auth/sign-in"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 py-2 text-center text-xs font-semibold rounded-lg bg-slate-900 text-slate-200 border border-slate-800"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/auth/sign-up"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex-1 py-2 text-center text-xs font-bold rounded-lg bg-amber-400 text-slate-950"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+            <Link
+              href="/create"
+              onClick={() => setMobileMenuOpen(false)}
+              className="w-full py-2.5 text-center text-xs font-bold rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 flex items-center justify-center gap-1.5"
+            >
+              <Zap className="w-3.5 h-3.5 fill-slate-950" />
+              <span>Host a Quiz</span>
+            </Link>
           </div>
         </div>
       )}
