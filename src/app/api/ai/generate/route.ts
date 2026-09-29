@@ -2,8 +2,6 @@ import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
 import { z } from "zod";
 
-const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-
 const requestSchema = z.object({
   topic: z.string(),
   numQuestions: z.number().min(1).max(100),
@@ -18,6 +16,7 @@ const requestSchema = z.object({
 
 export async function POST(req: Request) {
   try {
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY || "" });
     const body = await req.json();
     const result = requestSchema.safeParse(body);
     
