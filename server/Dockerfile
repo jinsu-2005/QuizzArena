@@ -2,7 +2,7 @@ FROM node:20-alpine AS runner
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install --legacy-peer-deps
 
 COPY server/ ./server/
 COPY src/db/ ./src/db/

@@ -6,7 +6,7 @@
     "dev": "concurrently \"next dev\" \"tsx watch server/index.ts\"",
     "dev:next": "next dev",
     "dev:ws": "tsx watch server/index.ts",
-    "build": "next build",
+    "build": "next build --webpack",
     "start": "next start",
     "start:ws": "tsx server/index.ts",
     "lint": "eslint"
