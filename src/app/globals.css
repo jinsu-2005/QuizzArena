@@ -1,0 +1,155 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+}
+
+:root {
+  --background: #070b14;
+  --foreground: #dfe2f1;
+  --card: #0f131d;
+  --card-foreground: #dfe2f1;
+  --popover: #0f131d;
+  --popover-foreground: #dfe2f1;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #171b26;
+  --secondary-foreground: #dfe2f1;
+  --muted: #1c1f2a;
+  --muted-foreground: #908fa0;
+  --accent: #4edea3;
+  --accent-foreground: #003824;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #1e293b;
+  --ring: #6366f1;
+}
+
+.dark {
+  --background: #070b14;
+  --foreground: #dfe2f1;
+  --card: #0f172a;
+  --card-foreground: #dfe2f1;
+  --popover: #0f172a;
+  --popover-foreground: #dfe2f1;
+  --primary: #6366f1;
+  --primary-foreground: #ffffff;
+  --secondary: #1e293b;
+  --secondary-foreground: #dfe2f1;
+  --muted: #1e293b;
+  --muted-foreground: #94a3b8;
+  --accent: #10b981;
+  --accent-foreground: #ffffff;
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+  --border: #1e293b;
+  --input: #334155;
+  --ring: #818cf8;
+}
+
+/* Tactile 3D Arcade Buzzer Button (from Stitch Design System) */
+.buzz-btn-outer {
+  background: radial-gradient(circle at 50% 40%, #f43f5e 0%, #dc2626 55%, #991b1b 100%);
+  box-shadow: 
+    0 0 50px rgba(239, 68, 68, 0.45),
+    0 15px 30px rgba(0, 0, 0, 0.7),
+    inset 0 4px 6px rgba(255, 255, 255, 0.4),
+    inset 0 -6px 12px rgba(0, 0, 0, 0.5);
+  transition: all 0.1s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.buzz-btn-outer:active:not(:disabled) {
+  transform: scale(0.94) translateY(6px);
+  box-shadow: 
+    0 0 30px rgba(239, 68, 68, 0.9),
+    0 4px 12px rgba(0, 0, 0, 0.9),
+    inset 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.buzz-btn-inner {
+  background: radial-gradient(circle at 45% 30%, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.05) 55%, rgba(0, 0, 0, 0.3) 100%);
+}
+
+/* Glassmorphism & High-Tech Panels */
+.glass-panel {
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-panel-glow {
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  box-shadow: 0 0 25px rgba(99, 102, 241, 0.12);
+}
+
+/* Circular countdown timer stroke */
+.radial-timer-ring {
+  transition: stroke-dashoffset 0.1s linear;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 15, 25, 0.6);
+}
+::-webkit-scrollbar-thumb {
+  background: #1e293b;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #334155;
+}
+
+/* Mobile Touch & Viewport Optimizations */
+html, body {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  overscroll-behavior-y: none;
+}
+
+/* Safe area support for modern mobile devices (iOS notch & gesture navigation) */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+  }
+}
