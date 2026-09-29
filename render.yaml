@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: buzzer-arena-ws
+    runtime: docker
+    dockerfilePath: ./server/Dockerfile
+    plan: free
+    region: singapore
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: PORT
+        value: 3001
+      - key: NODE_ENV
+        value: production
+    healthCheckPath: /health
+    autoDeploy: true

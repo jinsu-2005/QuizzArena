@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎯 BuzzArena
 
-## Getting Started
+**Real-time quiz & buzzer battle platform** — host live quizzes, verbal buzz battles, and MCQ tournaments with AI-generated questions and live leaderboards.
 
-First, run the development server:
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/jinsu-2005/BuzzArena)
+
+## ✨ Features
+
+- **🧠 AI Question Generation** — Powered by Google Gemini, auto-generate quiz questions by topic
+- **⚡ Verbal Buzz Mode** — Physical buzzer-style rapid-fire with queue-based answer passing
+- **📊 MCQ Mode** — Standard multiple-choice quiz with timed rounds
+- **🏆 Live Leaderboard** — Real-time scoring with animated podium
+- **📱 Mobile-First** — Fully responsive for phones, tablets, and projectors
+- **🎨 Beautiful UI** — Dark glassmorphic design with smooth animations
+
+## 🏗️ Architecture
+
+| Service | Technology | Hosting |
+|---------|-----------|---------|
+| Frontend + API | Next.js 16 (App Router) | Vercel |
+| WebSocket Server | Socket.io + Node.js | Render |
+| Database | PostgreSQL (Drizzle ORM) | Neon |
+| AI | Google Gemini API | — |
+
+## 🚀 Local Development
 
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Copy env vars
+cp .env.example .env.local
+# Fill in DATABASE_URL, GEMINI_API_KEY, NEXT_PUBLIC_WS_URL
+
+# 3. Run migrations
+npx drizzle-kit push
+
+# 4. Start both servers
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+App runs on `http://localhost:3000`, WebSocket on `http://localhost:3001`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 🌐 Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Frontend → Vercel
+1. Connect this GitHub repo to Vercel
+2. Add environment variables in Vercel dashboard:
+   - `DATABASE_URL` (Neon connection string)
+   - `GEMINI_API_KEY`
+   - `NEXT_PUBLIC_APP_URL` (your Vercel URL)
+   - `NEXT_PUBLIC_WS_URL` (your Render WebSocket URL)
 
-## Learn More
+### WebSocket Backend → Render
+1. Create a new **Web Service** on Render
+2. Connect this repo and point to `server/Dockerfile`
+3. Add `DATABASE_URL` env var
+4. Set health check path to `/health`
 
-To learn more about Next.js, take a look at the following resources:
+## 📁 Project Structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+├── src/
+│   ├── app/           # Next.js pages & API routes
+│   ├── components/    # Reusable UI components
+│   ├── db/            # Drizzle ORM schema & client
+│   └── lib/           # Utilities (socket, sound, auth)
+├── server/
+│   ├── index.ts       # Socket.io WebSocket server
+│   └── Dockerfile     # Container for Render deployment
+└── render.yaml        # Render deployment config
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## 🎮 How to Play
 
-## Deploy on Vercel
+1. **Host** creates a quiz and starts a room → gets a room code
+2. **Players** join via `/join` or QR code on their phones
+3. Everyone marks **Ready** → Host starts the quiz
+4. In **Verbal Buzz** mode: players buzz first, host judges answers
+5. In **MCQ** mode: players select answers within the timer
+6. **Leaderboard** updates live after each question
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Made with ❤️ by [Jinsu J](https://github.com/jinsu-2005)
